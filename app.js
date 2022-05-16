@@ -14,7 +14,7 @@ app.use('/*', (req, res, next) => {
 
 app.use((error, request, response, next) => {
     console.log(err);
-    response.status(500).send({ msg: "internal server error" })
+    response.status(500).send({ msg: "Internal Server Error" })
   });
 
   module.exports = app;
