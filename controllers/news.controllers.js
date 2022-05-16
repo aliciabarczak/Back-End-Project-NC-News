@@ -1,5 +1,6 @@
 //REQUIRE IN ALL MODEL FUNCS
-const { fetchTopics } = require("./../models/news.models")
+const { fetchTopics, 
+        fetchArticleById } = require("./../models/news.models")
 
 exports.getTopics = (request, response, next) => {
     fetchTopics().then((topics) => {
@@ -8,4 +9,14 @@ exports.getTopics = (request, response, next) => {
         console.log(error)
         next(error)
     });
-}
+};
+
+exports.getArticleById = (request, response) => {
+    const {article_id } = request.params; 
+    fetchArticleById(article_id)
+    .then((article) => {
+        response.status(200).send({article});
+    }).catch((error)=> {
+        console.log(error)
+    });
+};
