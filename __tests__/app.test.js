@@ -75,5 +75,44 @@ describe("3. GET /api/topics", () => {
        })
      });
   });
+
+  describe.only("5. PATCH /api/articles/:article_id",() => {
+    test('status 200: increments vote numbers by the number passed in the request and returns an updated article', () => {
+      const newIncrementedVotes = { inc_votes : 1 };
+      return request(app)
+      .patch("/api/articles/1")
+      .send(newIncrementedVotes)
+      .expect(200)
+      .then(({body : { updatedArticle }}) => {
+        expect(updatedArticle).toEqual({
+          author: "butter_bridge",
+          title: "Living in the shadow of a great man",
+          article_id: 1,
+          body: "I find this existence challenging",
+          topic: "mitch",
+          created_at: "2020-07-09T20:11:00.000Z",
+          votes: 101,
+        })
+    })
+  });
+test('status 200: decrements vote numbers by the number passed in the request and returns an updated article', () => {
+  const newDecrementedVotes = { inc_votes : -50 };
+  return request(app)
+  .patch("/api/articles/1")
+  .send(newDecrementedVotes)
+  .expect(200)
+  .then(({body : { updatedArticle }}) => {
+    expect(updatedArticle).toEqual({
+      author: "butter_bridge",
+      title: "Living in the shadow of a great man",
+      article_id: 1,
+      body: "I find this existence challenging",
+      topic: "mitch",
+      created_at: "2020-07-09T20:11:00.000Z",
+      votes: 50,
+     })
+    })
+  });
+});
     
   
