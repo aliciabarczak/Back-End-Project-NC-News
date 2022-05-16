@@ -13,7 +13,7 @@ afterAll(() => {
     return seed(testData);
   });
   
-  describe.only("3. GET /api/topics", () => {
+  describe("3. GET /api/topics", () => {
       test("status 200: responds with an array of topic objects, each of which should have `slug` and `description` properties", () => {
         return request(app)
         .get("/api/topics")
@@ -29,5 +29,13 @@ afterAll(() => {
                 )
             })
         })
+      })
+      test("404: responds with route not found", () => {
+          return request(app)
+          .get("/api/bananas")
+          .expect(404)
+          .then(({body: {msg}}) => {
+            expect(msg).toBe("Not Found")
+          })
       })
   });

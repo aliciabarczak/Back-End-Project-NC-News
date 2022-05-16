@@ -8,9 +8,13 @@ app.use(express.json());
 
 app.get("/api/topics", getTopics)
 
-app.use((err, req, res, next) => {
+app.use('/*', (req, res, next) => {
+    res.status(404).send({msg : 'Not Found'});
+})
+
+app.use((error, request, response, next) => {
     console.log(err);
-    res.status(500).send({ msg: "internal server error" })
+    response.status(500).send({ msg: "internal server error" })
   });
 
   module.exports = app;
