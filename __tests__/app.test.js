@@ -156,23 +156,30 @@ test('status 200: decrements vote numbers by the number passed in the request an
        })
   });
 
-  describe.only("6. GET /api/users", () => {
-    test('status 200: responds with an object contaning all users', () => {
+  describe("6. GET /api/users", () => {
+    test('status 200: responds with an array of objects with username properties only', () => {
         return request(app)
         .get("/api/users")
         .expect(200)
-        .then(({body: {users}}) => {
-            expect(users).toHaveLength(4)
-            users.forEach((user) => {
+        .then(({body: {usernames}}) => {
+            expect(usernames).toHaveLength(4)
+            usernames.forEach((user) => {
                 expect.objectContaining({
                     username: expect.any(String),
-                    name: expect.any(String),
-                    avatar_url: expect.any(String)
                 })
             })
         })
     });
+    test("404: responds with route not found when passed invalid GET ALL route", () => {
+      return request(app)
+      .get("/api/bananas")
+      .expect(404)
+      .then(({body: {msg}}) => {
+        expect(msg).toBe("Not Found")
+      })
+  })
 });
+
 
 
   

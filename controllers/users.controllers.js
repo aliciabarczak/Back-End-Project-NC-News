@@ -1,10 +1,11 @@
 const {fetchUsers } = require("./../models/users.models");
 
 exports.getAllUsers = (request, response) => {
-    fetchUsers().then((users) => {
-        console.log(users)
-        response.status(200).send({users})
+    fetchUsers()
+    .then((usernames) => {
+        console.log(usernames)
+       response.status(200).send({usernames})
     }).catch((error) => {
-        console.log(error)
+       console.log(error)
     })
 };
