@@ -8,13 +8,13 @@ exports.fetchTopics = () => {
 
 exports.fetchArticleById = (article_id) => {
     return db.query(`
-                    SELECT articles.author, articles.title, articles.article_id, articles.body, articles.topic, articles.created_at, articles.votes,
-                        COUNT(comments.article_id) AS comment_count
+                    SELECT articles.*,
+                        COUNT(comment_id) AS comment_count
                     FROM articles 
-                    INNER JOIN comments 
+                    LEFT JOIN comments 
                     ON articles.article_id = comments.article_id
                     WHERE articles.article_id = $1
-                    GROUP BY articles.author, articles.title, articles.article_id;`, [article_id])
+                    GROUP BY articles.article_id;`, [article_id])
        .then(({rows}) => {
         if(!rows.length) {
             return Promise.reject({status: 404, msg: "Not Found"})
