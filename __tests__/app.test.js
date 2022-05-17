@@ -41,13 +41,13 @@ describe("3. GET /api/topics", () => {
       })
   });
 
-  describe("4. GET /api/articles/:article_id", () => {
+describe("4. GET /api/articles/:article_id", () => {
     test("status 200: responds with an article object contaning all 7 properties", () => {
       return request(app)
       .get("/api/articles/1")
       .expect(200)
       .then(({body : { article }}) => {
-          expect(article).toEqual({
+          expect(article).toEqual(expect.objectContaining({
               author: "butter_bridge",
               title: "Living in the shadow of a great man",
               article_id: 1,
@@ -55,7 +55,7 @@ describe("3. GET /api/topics", () => {
               topic: "mitch",
               created_at: "2020-07-09T20:11:00.000Z",
               votes: 100,
-          })
+          }))
         })
      });  
     test('status 404: responds with "Not Found" when passed an id that does not exist', () => {
@@ -180,6 +180,22 @@ test('status 200: decrements vote numbers by the number passed in the request an
   })
 });
 
-
-
-  
+describe("7. GET /api/articles/:article_id (comment count)",() => {
+  test('status 200: returns the article response object which new comment_count property', () => {
+    return request(app)
+    .get("/api/articles/1")
+    .expect(200)
+    .then(({body : { article }}) => {
+      expect(article).toEqual({
+        author: "butter_bridge",
+        title: "Living in the shadow of a great man",
+        article_id: 1,
+        body: "I find this existence challenging",
+        topic: "mitch",
+        created_at: "2020-07-09T20:11:00.000Z",
+        votes: 100,
+        comment_count: 11,
+      })
+    })
+  });
+});
