@@ -7,22 +7,22 @@ exports.fetchTopics = () => {
 };
 
 exports.fetchArticleById = (article_id) => {
- return Promise.all([
-    db.query("SELECT * FROM articles WHERE article_id = $1", [article_id]),
-    db.query("SELECT * FROM comments WHERE article_id = $1", [article_id])
-    ])
-    .then(([article, allComments]) => {
-        article = article.rows[0];
-        if(!article) {
+    return db.query(`
+                    SELECT articles.author, articles.title, articles.article_id, articles.body, articles.topic, articles.created_at, articles.votes,
+                        COUNT(comments.article_id) AS comment_count
+                    FROM articles 
+                    INNER JOIN comments 
+                    ON articles.article_id = comments.article_id
+                    WHERE articles.article_id = $1
+                    GROUP BY articles.author, articles.title, articles.article_id;`, [article_id])
+       .then(({rows}) => {
+        if(!rows.length) {
             return Promise.reject({status: 404, msg: "Not Found"})
-        }
-        const comment_count = allComments.rows.length;
-        return {
-            ...article,
-            comment_count,
-        };
-    })
-};
+       }
+            rows[0].comment_count = parseInt(rows[0].comment_count)
+            return rows[0]
+       })
+   };
    
 exports.updateVotesById = (article_id, inc_votes) => {
     return db.query(`SELECT votes 
