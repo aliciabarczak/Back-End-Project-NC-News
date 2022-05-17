@@ -22,10 +22,12 @@ exports.updateVotesById = (article_id, inc_votes) => {
                      FROM articles 
                      WHERE article_id = $1`, [article_id])
     .then(({rows}) => {
+       if (typeof inc_votes != "number") {
+           return Promise.reject({ status: 400, msg: "Bad Request"})
+        }
        let votes = rows[0].votes; 
        votes += inc_votes;
-    return db.query(`UPDATE articles
-              SET votes = ${votes}
+            return db.query(`UPDATE articles SET votes = ${votes}
               WHERE article_id = $1
               RETURNING*`, [article_id])
     }).then(({rows}) => {

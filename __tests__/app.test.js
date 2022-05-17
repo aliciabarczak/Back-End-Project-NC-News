@@ -113,6 +113,16 @@ test('status 200: decrements vote numbers by the number passed in the request an
      })
     })
   });
+  test('status 400: returns "Bad Request" message when passed malformed request body', () => {
+    const requestBody = { inc_votes : "five" }; 
+    return request(app)
+       .patch("/api/articles/1")
+       .send(requestBody)
+       .expect(400)
+       .then (({body: {msg}}) => {
+         expect(msg).toBe("Bad Request")
+       })
+  });
 });
     
   
