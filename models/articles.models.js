@@ -21,7 +21,10 @@ exports.updateVotesById = (article_id, inc_votes) => {
                      FROM articles 
                      WHERE article_id = $1`, [article_id])
     .then(({rows}) => {
-       if (typeof inc_votes != "number") {
+       if(!rows.length) {
+            return Promise.reject({status: 404, msg: "Not Found"})
+       }
+       if (typeof inc_votes !== "number") {
            return Promise.reject({ status: 400, msg: "Bad Request"})
         }
        let votes = rows[0].votes; 
