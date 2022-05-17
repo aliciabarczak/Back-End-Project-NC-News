@@ -1,7 +1,6 @@
-//REQUIRE IN ALL MODEL FUNCS
 const { fetchTopics, 
         fetchArticleById,
-        updateVotesById } = require("./../models/news.models")
+        updateVotesById } = require("./../models/articles.models")
 
 exports.getTopics = (request, response, next) => {
     fetchTopics().then((topics) => {
