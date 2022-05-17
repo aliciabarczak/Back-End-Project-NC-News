@@ -156,4 +156,23 @@ test('status 200: decrements vote numbers by the number passed in the request an
        })
   });
 
+  describe.only("6. GET /api/users", () => {
+    test('status 200: responds with an object contaning all users', () => {
+        return request(app)
+        .get("/api/users")
+        .expect(200)
+        .then(({body: {users}}) => {
+            expect(users).toHaveLength(4)
+            users.forEach((user) => {
+                expect.objectContaining({
+                    username: expect.any(String),
+                    name: expect.any(String),
+                    avatar_url: expect.any(String)
+                })
+            })
+        })
+    });
+});
+
+
   
