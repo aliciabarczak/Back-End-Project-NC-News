@@ -3,7 +3,8 @@ const { getTopics,
         getArticleById, 
         patchVotesById, 
         getArticles,
-        getCommentsByArticleId } = require("./controllers/articles.controllers")
+        getCommentsByArticleId,
+        postComment } = require("./controllers/articles.controllers")
 const { getAllUsers } = require("./controllers/users.controllers");
 const { handleInvalidPathErrors,
         handleCustomErrors,
@@ -20,8 +21,8 @@ app.get("/api/articles/:article_id", getArticleById);
 app.patch("/api/articles/:article_id", patchVotesById);
 app.get("/api/articles", getArticles);
 app.get("/api/articles/:article_id/comments", getCommentsByArticleId);
-
 app.get("/api/users", getAllUsers);
+app.post("/api/articles/:article_id/comments", postComment);
 
 app.use(handleInvalidPathErrors);
 app.use(handleCustomErrors);
