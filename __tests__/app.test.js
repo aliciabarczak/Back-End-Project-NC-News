@@ -10,7 +10,7 @@ beforeEach(() => {
   });
 
 afterAll(() => {
-    if (db.end) db.end();
+    db.end();
   });
   
 describe("3. GET /api/topics", () => {
@@ -198,7 +198,7 @@ describe("7. GET /api/articles/:article_id (comment count)",() => {
   });
 });
 
-describe.only("8. GET /api/articles", () => {
+describe("8. GET /api/articles", () => {
   test('Status 200: responds with an array of objects contaning all articles. Each article object should include additional "votes" and "comment_count" property', () => {
   return request(app)
   .get("/api/articles")
@@ -227,4 +227,25 @@ test('Status 404: returns "Not Found" error message when passed invalid path', (
       expect(msg).toBe("Not Found")
     })
   });
+});
+
+describe.only("9. GET /api/articles/:article_id/comments", () => {
+  test("status 200: returns an array of comments for the given article_id", () => {
+      return request(app)
+      .get("/api/articles/1/comments")
+      .expect(200)
+      .then(({body: { comments }}) => {
+        console.log(comments)
+          expect(comments).toHaveLength(11);
+          comments.forEach((comment) => {
+              expect.objectContaining({
+                  comment_id: expect.any(String),
+                  votes: expect.any(Number),
+                  created_at: expect.any(String),
+                  author: expect.any(String),
+                  body: expect.any(String)
+              });
+          })
+       })
+    });
 });
