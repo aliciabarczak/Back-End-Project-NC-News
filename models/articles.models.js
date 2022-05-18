@@ -63,17 +63,8 @@ exports.fetchArticles = () => {
 };
 
 exports.fetchCommentsByArticleId = (article_id) => {
-    return Promise.all([
-       db.query(`SELECT *
-                 FROM comments 
-                 WHERE article_id = $1;`, [article_id]),
-        db.query(`SELECT *
-                  FROM articles 
-                  WHERE article_id = $1;`, [article_id])
-    ]).then(([comments, checkExists]) => {
-        if (!comments.rows.length && !checkExists.rows.length) {
-            return Promise.reject({status: 404, msg: "Not Found"})
-        }
-       return comments.rows
+    return db.query(`SELECT * FROM comments WHERE article_id = $1;`, [article_id])
+    .then(({rows}) => {  
+        return rows
     })
 };
