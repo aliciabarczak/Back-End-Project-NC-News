@@ -55,6 +55,9 @@ exports.fetchArticles = () => {
             GROUP BY articles.article_id
             ORDER BY articles.created_at DESC;`)
     .then(({rows}) => {
+        rows.forEach((row) => {
+            delete row.body
+        })
         return rows 
     })
 };
