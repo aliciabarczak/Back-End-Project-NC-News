@@ -60,12 +60,6 @@ exports.getCommentsByArticleId = (request, response, next) => {
 exports.postComment = (request, response) => {
     const { article_id } = request.params;
     const { username, body } = request.body; 
-    fetchUsers().then((users) => {
-      const check = users.filter(user => user.username === username);
-       if(!check.length) {
-         addUser(username)
-      }})
-
     postCommentToDB(article_id, username, body)
     .then((createdComment) => {
      response.status(201).send({createdComment})})
