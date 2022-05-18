@@ -1,4 +1,3 @@
-process.env.NODE_ENV = "test";
 const request = require('supertest');
 const app = require('../app');
 const db = require('../db/connection');
@@ -95,7 +94,6 @@ describe("4. GET /api/articles/:article_id", () => {
         })
     })
   });
-
   test('status 404: responds with "Not Found" when passed an id that does not exist', () => {
     const newIncrementedVotes = { inc_votes : 1 };
     return request(app)
@@ -196,6 +194,37 @@ describe("7. GET /api/articles/:article_id (comment count)",() => {
         votes: 100,
         comment_count: 11,
       })
+    })
+  });
+});
+
+describe.only("8. GET /api/articles", () => {
+  test('Status 200: responds with an array of objects contaning all articles. Each article object should include additional "votes" and "comment_count" property', () => {
+  return request(app)
+  .get("/api/articles")
+  .expect(200)
+  .then(({body: {articles}}) => {
+      expect(articles).toHaveLength(12)
+      articles.forEach((article) => {
+        expect.objectContaining({
+          author: expect.any(String),
+          title: expect.any(String),
+          article_id: expect.any(Number),
+          topic: expect.any(String),
+          created_at: expect.any(String),
+          votes: expect.any(Number),
+          comment_count: expect.any(Number),
+      })
+    expect(articles).toBeSortedBy("created_at", { descending: true })
+    })
+  })
+})
+test('Status 404: returns "Not Found" error message when passed invalid path', () => {
+  request(app)
+  .get("/api/sloth")
+  .expect(404)
+  .then(({body: { msg }}) => {
+      expect(msg).toBe("Not Found")
     })
   });
 });
