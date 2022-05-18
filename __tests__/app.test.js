@@ -248,4 +248,29 @@ describe.only("9. GET /api/articles/:article_id/comments", () => {
           })
        })
     });
-});
+
+test('status 400: responds with "Bad Request" when passed an id of invalid type', () => {
+    return request(app)
+    .get("/api/articles/sloth/comments")
+    .expect(400)
+    .then (({body: {msg}}) => {
+      expect(msg).toBe("Bad Request")
+    })
+  });
+  test('status 404: responds with "Not Found" when passed an id that does not exist', () => {
+    return request(app)
+    .get("/api/articles/9999999/comments")
+    .expect(404)
+    .then(({body: {msg}}) => {
+      expect(msg).toBe("Not Found")
+    })
+   }); 
+   test('status 200: responds with an empty array when the given id exists but has no comments', () => {
+    return request(app)
+    .get("/api/articles/2/comments")
+    .expect(200)
+    .then(({body: { comments }}) => {
+      expect(comments).toEqual([])
+    })
+   }); 
+  });
