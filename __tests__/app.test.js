@@ -229,7 +229,7 @@ test('Status 404: returns "Not Found" error message when passed invalid path', (
   });
 });
 
-describe.only("9. GET /api/articles/:article_id/comments", () => {
+describe("9. GET /api/articles/:article_id/comments", () => {
   test("status 200: returns an array of comments for the given article_id", () => {
       return request(app)
       .get("/api/articles/1/comments")
@@ -273,3 +273,48 @@ test('status 400: responds with "Bad Request" when passed an id of invalid type'
     })
    }); 
   });
+
+  describe.only("10. POST /api/articles/:article_id/comments",() => {
+    test('status 201: should post requested comment from an exisiting user and return the same', () => {
+        const postedComment = {
+            username: "butter_bridge",
+            body: "nope"
+        };
+        return request(app)
+        .post("/api/articles/2/comments")
+        .send(postedComment)
+        .expect(201)
+        .then(({ body: { createdComment } }) => {
+            expect(createdComment).toEqual(expect.objectContaining({
+                article_id: 2,
+                author: "butter_bridge",
+                body: "nope",
+                comment_id: 19,
+                created_at: expect.any(String),
+                votes: 0
+            }))
+        })
+      });
+  test('status 201: should post requested comment from a new user and return the same', () => {
+      const postedComment = {
+          username: "banana",
+          body: "I am banana"
+      };
+      return request(app)
+      .post("/api/articles/2/comments")
+      .send(postedComment)
+      .expect(201)
+      .then(({ body: { createdComment } }) => {
+          expect(createdComment).toEqual(expect.objectContaining({
+              article_id: 2,
+              author: "banana",
+              body: "I am banana",
+              comment_id: 19,
+              created_at: expect.any(String),
+              votes: 0
+        }))
+    })
+  });
+});
+  
+    

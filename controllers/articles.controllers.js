@@ -4,7 +4,8 @@ const { fetchTopics,
         fetchArticles, 
         fetchCommentsByArticleId, 
         postCommentToDB } = require("./../models/articles.models")
-const { fetchUsers } = require("./../models/users.models")
+const { fetchUsers, 
+        addUser } = require("./../models/users.models")
 
 exports.getTopics = (request, response, next) => {
     fetchTopics().then((topics) => {
@@ -59,13 +60,19 @@ exports.getCommentsByArticleId = (request, response, next) => {
 exports.postComment = (request, response) => {
     const { article_id } = request.params;
     const { username, body } = request.body; 
+    fetchUsers().then((users) => {
+      const check = users.filter(user => user.username === username);
+       if(!check.length) {
+         addUser(username)
+      }})
+
     postCommentToDB(article_id, username, body)
     .then((createdComment) => {
-        response.status(201).send({ createdComment })
-    })
-}
-
-
+     response.status(201).send({createdComment})})
+     .catch((error) => {
+     console.log(error)
+ })
+};
 
     
     
