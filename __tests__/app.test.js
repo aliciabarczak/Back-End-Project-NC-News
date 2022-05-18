@@ -222,4 +222,12 @@ describe.only("8. GET /api/articles", () => {
     })
   })
 })
+test('Status 404: returns "Not Found" error message when passed invalid path', () => {
+  request(app)
+  .get("/api/sloth")
+  .expect(404)
+  .then(({body: { msg }}) => {
+      expect(msg).toBe("Not Found")
+    })
+  });
 });
