@@ -1,7 +1,8 @@
 const { fetchTopics, 
         fetchArticleById,
         updateVotesById, 
-        fetchArticles } = require("./../models/articles.models")
+        fetchArticles, 
+        fetchCommentsByArticleId } = require("./../models/articles.models")
 
 exports.getTopics = (request, response, next) => {
     fetchTopics().then((topics) => {
@@ -42,4 +43,13 @@ exports.getArticles = (request, response, next) => {
         console.log(error)
         next(error)
     })
-}
+};
+
+exports.getCommentsByArticleId = (request, response, next) => {
+    const { article_id } = request.params; 
+    const promises = [fetchArticleById(article_id), fetchCommentsByArticleId(article_id)]
+    
+    Promise.all(promises).then(([_, comments]) => {
+        response.status(200).send({comments})
+    }).catch(next)
+};
