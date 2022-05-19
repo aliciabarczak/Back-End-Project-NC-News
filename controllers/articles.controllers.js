@@ -4,8 +4,7 @@ const { fetchTopics,
         fetchArticles, 
         fetchCommentsByArticleId, 
         postCommentToDB } = require("./../models/articles.models")
-const { fetchUsers, 
-        addUser } = require("./../models/users.models")
+const { fetchUsers } = require("./../models/users.models")
 
 exports.getTopics = (request, response, next) => {
     fetchTopics().then((topics) => {

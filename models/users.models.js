@@ -7,13 +7,3 @@ exports.fetchUsers = () => {
         })
     })
 }
-
-exports.addUser = (username) => {
-    return db.query(`INSERT INTO 
-                     users (username, name)
-                     VALUES ($1, $1)
-                     RETURNING *`, [username])
-    .then(({rows}) => {
-        return rows[0]
-    })
-};
