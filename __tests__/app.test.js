@@ -347,6 +347,19 @@ test('status 400: responds with "Bad Request" when passed an id of invalid type'
             expect(msg).toBe("Bad Request")
         })
       });
+      test("code 400: returns 'Bad Request' error message when passed request body with invalid username", () => {
+        const postedComment = {
+            username: "banana",
+            body: "none"
+          };
+        return request(app)
+        .post("/api/articles/1/comments")
+        .send(postedComment)
+        .expect(404)
+        .then(({ body: { msg } }) => {
+            expect(msg).toBe("Username Not Found")
+        })
+      });
 });
   
     

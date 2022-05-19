@@ -4,7 +4,8 @@ const { fetchTopics,
         fetchArticles, 
         fetchCommentsByArticleId, 
         postCommentToDB } = require("./../models/articles.models")
-const { fetchUsers } = require("./../models/users.models")
+const { fetchUsers,
+        fetchUserByUsername } = require("./../models/users.models")
 
 exports.getTopics = (request, response, next) => {
     fetchTopics().then((topics) => {
@@ -59,8 +60,8 @@ exports.getCommentsByArticleId = (request, response, next) => {
 exports.postComment = (request, response, next) => {
     const { article_id } = request.params;
     const { username, body } = request.body; 
-    const promises = [fetchArticleById(article_id)]; 
 
+    const promises = [fetchArticleById(article_id), fetchUserByUsername(username)]; 
 
     if (typeof username !== "string" || typeof body !== "string") {
         response.status(400).send({msg: "Bad Request"})
@@ -68,9 +69,13 @@ exports.postComment = (request, response, next) => {
     else {
         promises.push(postCommentToDB(article_id, username, body))
     }
-    Promise.all(promises).then(([_, createdComment]) => {
+    
+    Promise.all(promises).then(([_, __, createdComment]) => {
      response.status(201).send({ createdComment })})
-     .catch(next)
+     .catch((error) => {
+         console.log(error)
+         next(error)
+     })
  };
 
 
