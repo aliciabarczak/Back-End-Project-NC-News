@@ -4,18 +4,15 @@ exports.fetchTopics = () => {
     return db.query("SELECT * FROM topics").then(({rows}) => {
         return rows;
     })
-};
-
+ };
 exports.fetchTopicBySlug = (topic) => {
-    db.query("SELECT * FROM topics WHERE slug = $1", [topic]).then(({rows}) => {
-        console.log(rows)
+    return db.query("SELECT * FROM topics WHERE slug = $1", [topic]).then(({rows}) => {
         if(!rows.length) {
             return Promise.reject({status: 404, msg: "Not Found"})
         }
-        return rows[0]
+        return rows
     })
-};
-
+ };
 exports.fetchArticleById = (article_id) => {
     return db.query(`
                     SELECT articles.*,
@@ -53,8 +50,7 @@ exports.updateVotesById = (article_id, inc_votes) => {
     }).then(({rows}) => {
         return rows[0];
     })
-};
-
+ };
 exports.fetchArticles = (sort_by = "created_at", order = "desc", topic) => {
     const validSortBy = ["title", "topic", "author", "created_at"];
     const validOrder = ["asc", "desc", "ASC", "DESC"];
@@ -92,15 +88,14 @@ exports.fetchArticles = (sort_by = "created_at", order = "desc", topic) => {
         })
         return rows 
     })
-};
+ };
 
 exports.fetchCommentsByArticleId = (article_id) => {
     return db.query(`SELECT * FROM comments WHERE article_id = $1;`, [article_id])
     .then(({rows}) => {  
         return rows
     })
-};
-
+ };
 exports.postCommentToDB = (article_id, username, body) => {
     return db.query(`INSERT INTO 
                     comments (body, author, article_id) 
@@ -109,13 +104,4 @@ exports.postCommentToDB = (article_id, username, body) => {
     .then(({rows}) => {
         return rows[0]
     })
-};
-
-    // return db.query(
-    //        `SELECT articles.*,
-    //             COUNT(comment_id) AS comment_count
-    //         FROM articles 
-    //         LEFT JOIN comments 
-    //         ON articles.article_id = comments.article_id
-    //         GROUP BY articles.article_id
-    //         ORDER BY articles.created_at DESC;`)
+ };

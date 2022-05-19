@@ -14,8 +14,7 @@ exports.getTopics = (request, response, next) => {
         console.log(error)
         next(error)
     });
-};
-
+    };
 exports.getArticleById = (request, response, next) => {
     const {article_id } = request.params; 
     fetchArticleById(article_id)
@@ -25,8 +24,7 @@ exports.getArticleById = (request, response, next) => {
          console.log(error)
          next(error)
      });
-};
-
+ };
 exports.patchVotesById = (request, response, next) => {
     const {article_id } = request.params; 
     const {inc_votes} = request.body;
@@ -36,27 +34,20 @@ exports.patchVotesById = (request, response, next) => {
         console.log(error)
         next(error)
     });
-};
-
+ };
 exports.getArticles = (request, response, next) => {
-    const { sort_by } = request.query; 
-    const { order } = request.query; 
-    const { topic } = request.query; 
-    const promises = ["_", fetchArticles(sort_by, order, topic)];
-
-    if(topic) {
-        promises.shift()
-        promises.unshift(fetchTopicBySlug(topic))
+    const { sort_by, order, topic } = request.query; 
+    const promises = [fetchArticles(sort_by, order, topic)];
+    if (topic) {
+        promises.push(fetchTopicBySlug(topic))
     }
-
     Promise.all(promises)
-    .then(([_, articles]) => {
+    .then(([articles]) => {
         response.status(200).send({articles})
     }).catch((error) => {
-        console.log(error)
         next(error)
     })
-};
+ };
 
 exports.getCommentsByArticleId = (request, response, next) => {
     const { article_id } = request.params; 
@@ -65,8 +56,7 @@ exports.getCommentsByArticleId = (request, response, next) => {
     Promise.all(promises).then(([_, comments]) => {
         response.status(200).send({comments})
     }).catch(next)
-};
-
+ };
 exports.postComment = (request, response, next) => {
     const { article_id } = request.params;
     const { username, body } = request.body; 
