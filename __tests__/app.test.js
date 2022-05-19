@@ -439,10 +439,27 @@ describe("11. GET /api/articles (queries)", () => {
   describe.only("12. DELETE /api/comments/:comment_id", () => {
     test("status 204: deletes a given comment by comment_id and responds with an empty response body", () => {
         return request(app)
-        .delete("/api/comments/1")
+        .delete("/api/comments/4")
         .expect(204)
         .then(({body}) => {
             expect(body).toEqual({});
         })
     })
+    test('status 404: responds with "Not Found" when passed an id that does not exist', () => {
+      return request(app)
+      .delete("/api/comments/999999")
+      .expect(404)
+      .then(({body: {msg}}) => {
+        expect(msg).toBe("Not Found")
+      })
+     }); 
+     test('status 400: responds with "Bad Request" when passed an id of invalid type ', () => {
+      const newIncrementedVotes = { inc_votes : 1 };
+       return request(app)
+       .delete("/api/comments/sloth")
+       .expect(400)
+       .then(({body: {msg}}) => {
+         expect(msg).toBe("Bad Request")
+       })
+     });
 });
