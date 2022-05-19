@@ -274,7 +274,7 @@ test('status 400: responds with "Bad Request" when passed an id of invalid type'
    }); 
   });
 
-  describe.only("10. POST /api/articles/:article_id/comments",() => {
+  describe("10. POST /api/articles/:article_id/comments",() => {
     test('status 201: should post requested comment from an exisiting user and return the same', () => {
         const postedComment = {
             username: "butter_bridge",
@@ -362,4 +362,37 @@ test('status 400: responds with "Bad Request" when passed an id of invalid type'
       });
 });
   
-    
+describe.only("11. GET /api/articles (queries)", () => {
+  test('status 200: returns the articles sorted by the passed query', () => {
+      return request(app)
+      .get("/api/articles?sort_by=title")
+      .expect(200)
+      .then(({body: {articles}}) => {
+          expect(articles).toBeSortedBy("title")
+      })
+  })
+  test('status 200: articles are sorted by date by default', () => {
+    return request(app)
+    .get("/api/articles")
+    .expect(200)
+    .then(({body: {articles}}) => {
+        expect(articles).toBeSortedBy("created_at")
+    })
+})
+test('status 200: articles are sorted by decedning order', () => {
+  return request(app)
+  .get("/api/articles?order=desc")
+  .expect(200)
+  .then(({body: {articles}}) => {
+      expect(articles).toBeSortedBy("created_at", { descending: true })
+  })
+})
+test('status 200: articles are sorted by ascending order', () => {
+  return request(app)
+  .get("/api/articles?order=asc")
+  .expect(200)
+  .then(({body: {articles}}) => {
+      expect(articles).toBeSortedBy("created_at")
+  })
+})
+});

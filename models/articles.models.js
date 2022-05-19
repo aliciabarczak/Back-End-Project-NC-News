@@ -45,15 +45,26 @@ exports.updateVotesById = (article_id, inc_votes) => {
     })
 };
 
-exports.fetchArticles = () => {
-    return db.query(
-           `SELECT articles.*,
-                COUNT(comment_id) AS comment_count
-            FROM articles 
-            LEFT JOIN comments 
-            ON articles.article_id = comments.article_id
-            GROUP BY articles.article_id
-            ORDER BY articles.created_at DESC;`)
+exports.fetchArticles = (sort_by = "created_at", order) => {
+    const validSortBy = ["title", "topic", "author", "created_at"];
+    const validOrder = ["asc", "desc"];
+
+    let queryStr = `SELECT articles.*,
+                      COUNT(comment_id) AS comment_count
+                      FROM articles 
+                      LEFT JOIN comments 
+                      ON articles.article_id = comments.article_id
+                      GROUP BY articles.article_id`
+
+    if(validSortBy.includes(sort_by)) {
+        queryStr += ` ORDER BY articles.${sort_by}`
+    };
+
+    if(validOrder.includes(order)) {
+        queryStr += ` ${order.toUpperCase()}`;
+    } 
+
+    return db.query(queryStr)
     .then(({rows}) => {
         rows.forEach((row) => {
             delete row.body
@@ -78,3 +89,12 @@ exports.postCommentToDB = (article_id, username, body) => {
         return rows[0]
     })
 };
+
+    // return db.query(
+    //        `SELECT articles.*,
+    //             COUNT(comment_id) AS comment_count
+    //         FROM articles 
+    //         LEFT JOIN comments 
+    //         ON articles.article_id = comments.article_id
+    //         GROUP BY articles.article_id
+    //         ORDER BY articles.created_at DESC;`)
