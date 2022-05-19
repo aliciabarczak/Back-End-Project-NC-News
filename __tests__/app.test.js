@@ -454,7 +454,6 @@ describe("11. GET /api/articles (queries)", () => {
       })
      }); 
      test('status 400: responds with "Bad Request" when passed an id of invalid type ', () => {
-      const newIncrementedVotes = { inc_votes : 1 };
        return request(app)
        .delete("/api/comments/sloth")
        .expect(400)
