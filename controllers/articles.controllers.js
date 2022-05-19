@@ -57,16 +57,22 @@ exports.getCommentsByArticleId = (request, response, next) => {
     }).catch(next)
 };
 
-exports.postComment = (request, response) => {
+exports.postComment = (request, response, next) => {
     const { article_id } = request.params;
     const { username, body } = request.body; 
-    postCommentToDB(article_id, username, body)
-    .then((createdComment) => {
-     response.status(201).send({createdComment})})
-     .catch((error) => {
-     console.log(error)
- })
-};
+    const promises = [fetchArticleById(article_id)]; 
+
+    if (typeof username !== "string" || typeof body !== "string") {
+        response.status(400).send({msg: "Bad Request"})
+        }
+    else {
+        promises.push(postCommentToDB(article_id, username, body))
+    }
+    Promise.all(promises).then(([_, createdComment]) => {
+     response.status(201).send({ createdComment })})
+     .catch(next)
+ };
+
 
     
     

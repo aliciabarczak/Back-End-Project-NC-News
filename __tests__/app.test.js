@@ -274,7 +274,7 @@ test('status 400: responds with "Bad Request" when passed an id of invalid type'
    }); 
   });
 
-  describe("10. POST /api/articles/:article_id/comments",() => {
+  describe.only("10. POST /api/articles/:article_id/comments",() => {
     test('status 201: should post requested comment from an exisiting user and return the same', () => {
         const postedComment = {
             username: "butter_bridge",
@@ -293,6 +293,58 @@ test('status 400: responds with "Bad Request" when passed an id of invalid type'
                 created_at: expect.any(String),
                 votes: 0
             }))
+        })
+      });
+      test('status 400: responds with "Bad Request" when passed an id of invalid type', () => {
+        const postedComment = {
+            username: "butter_bridge",
+            body: "I am Banana"
+        };
+        return request(app)
+        .post("/api/articles/sloth/comments")
+        .send(postedComment)
+        .expect(400)
+        .then (({body: {msg}}) => {
+          expect(msg).toBe("Bad Request")
+        })
+      });
+      test('status 404: responds with "Not Found" when passed an id that does not exist', () => {
+        const postedComment = {
+          username: "butter_bridge",
+            body: "I am Banana"
+        };
+        return request(app)
+        .post("/api/articles/9999999/comments")
+        .send(postedComment)
+        .expect(404)
+        .then(({body: {msg}}) => {
+          expect(msg).toBe("Not Found")
+        })
+       }); 
+
+      test("code 400: returns 'Bad Request' error message when passed request body with missing keys", () => {
+        const postedComment = {
+            body: "I am Banana"
+        };
+        return request(app)
+        .post("/api/articles/1/comments")
+        .send(postedComment)
+        .expect(400)
+        .then(({ body: { msg } }) => {
+            expect(msg).toBe("Bad Request")
+        })
+      });
+      test("code 400: returns 'Bad Request' error message when passed request body with invalid value types", () => {
+        const postedComment = {
+            username: false,
+            body: "none"
+          };
+        return request(app)
+        .post("/api/articles/1/comments")
+        .send(postedComment)
+        .expect(400)
+        .then(({ body: { msg } }) => {
+            expect(msg).toBe("Bad Request")
         })
       });
 });
