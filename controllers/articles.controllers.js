@@ -1,4 +1,5 @@
 const { fetchTopics, 
+        fetchTopicBySlug,
         fetchArticleById,
         updateVotesById, 
         fetchArticles, 
@@ -40,9 +41,16 @@ exports.patchVotesById = (request, response, next) => {
 exports.getArticles = (request, response, next) => {
     const { sort_by } = request.query; 
     const { order } = request.query; 
+    const { topic } = request.query; 
+    const promises = ["_", fetchArticles(sort_by, order, topic)];
 
-    fetchArticles(sort_by, order)
-    .then((articles) => {
+    if(topic) {
+        promises.shift()
+        promises.unshift(fetchTopicBySlug(topic))
+    }
+
+    Promise.all(promises)
+    .then(([_, articles]) => {
         response.status(200).send({articles})
     }).catch((error) => {
         console.log(error)

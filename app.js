@@ -29,6 +29,7 @@ app.get("/api/articles?sort_by=author", getArticles);
 app.get("/api/articles?sort_by=created_at", getArticles);
 app.get("/api/articles?order=asc", getArticles);
 app.get("/api/articles?order=desc", getArticles);
+app.get("/api/articles?topic=mitch", getArticles);
 
 app.use(handleInvalidPathErrors);
 app.use(handleCustomErrors);

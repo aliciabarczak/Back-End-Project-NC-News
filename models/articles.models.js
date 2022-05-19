@@ -6,6 +6,16 @@ exports.fetchTopics = () => {
     })
 };
 
+exports.fetchTopicBySlug = (topic) => {
+    db.query("SELECT * FROM topics WHERE slug = $1", [topic]).then(({rows}) => {
+        console.log(rows)
+        if(!rows.length) {
+            return Promise.reject({status: 404, msg: "Not Found"})
+        }
+        return rows[0]
+    })
+};
+
 exports.fetchArticleById = (article_id) => {
     return db.query(`
                     SELECT articles.*,
@@ -45,30 +55,37 @@ exports.updateVotesById = (article_id, inc_votes) => {
     })
 };
 
-exports.fetchArticles = (sort_by = "created_at", order = "desc") => {
+exports.fetchArticles = (sort_by = "created_at", order = "desc", topic) => {
     const validSortBy = ["title", "topic", "author", "created_at"];
     const validOrder = ["asc", "desc", "ASC", "DESC"];
+    const queryValues = []; 
 
-    let queryStr = `SELECT articles.*,
-                      COUNT(comment_id) AS comment_count
-                      FROM articles 
-                      LEFT JOIN comments 
-                      ON articles.article_id = comments.article_id
-                      GROUP BY articles.article_id`
+    let queryArray = ["SELECT articles.*,",
+                      " COUNT(comment_id) AS comment_count",
+                      " FROM articles", 
+                      " LEFT JOIN comments", 
+                      " ON articles.article_id = comments.article_id",
+                      " GROUP BY articles.article_id"]
+
+    if (topic) {
+        queryArray.splice(5, 0, ' WHERE topic = $1')
+        queryValues.push(topic)
+    }
 
     if(validSortBy.includes(sort_by)) {
-        queryStr += ` ORDER BY articles.${sort_by}`
+        queryArray.push(` ORDER BY articles.${sort_by}`)
     } else {
         return Promise.reject({status: 400, msg: 'Invalid Sort Query'});
     }
 
     if(validOrder.includes(order)) {
-        queryStr += ` ${order}`;
+        queryArray.push(` ${order}`);
     } else {
         return Promise.reject({status: 400, msg: 'Invalid Order Query'});
     }
+    const queryStr = queryArray.join("");
 
-    return db.query(queryStr)
+    return db.query(queryStr, queryValues)
     .then(({rows}) => {
         rows.forEach((row) => {
             delete row.body

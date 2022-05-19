@@ -362,7 +362,7 @@ test('status 400: responds with "Bad Request" when passed an id of invalid type'
       });
 });
   
-describe.only("11. GET /api/articles (queries)", () => {
+describe("11. GET /api/articles (queries)", () => {
   test('status 200: returns the articles sorted by the passed query in descending order by default', () => {
       return request(app)
       .get("/api/articles?sort_by=title")
@@ -411,5 +411,33 @@ test('status 200: articles can be sorted by ascending order', () => {
     .then(({body: {msg}}) => {
         expect(msg).toBe("Invalid Order Query")
     })
-})
+  })
+  test('status 200: filters the articles by the topic value specified in the query', () => {
+    return request(app)
+    .get("/api/articles?topic=mitch")
+    .expect(200)
+    .then(({body: {articles}}) => {
+        expect(articles).toHaveLength(11)
+        articles.forEach((article) => {
+          expect(article.topic).toBe("mitch")
+        })
+      })
+    })
+    test('status 404: return error message when query topic does not exist', () => {
+      return request(app)
+      .get("/api/articles?topic=carrot")
+      .expect(404)
+      .then(({body: {msg}}) => {
+          expect(msg).toBe("Topic Not Found")
+        })
+      })
+      test('status 200: return an empty array when query topic exists but has no associated articles', () => {
+        return request(app)
+        .get("/api/articles?topic=paper")
+        .expect(200)
+        .then(({body: { articles }}) => {
+          expect(articles).toEqual([])
+        })
+      })
 });
+
