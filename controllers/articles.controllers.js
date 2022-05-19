@@ -44,9 +44,7 @@ exports.getArticles = (request, response, next) => {
     Promise.all(promises)
     .then(([articles]) => {
         response.status(200).send({articles})
-    }).catch((error) => {
-        next(error)
-    })
+    }).catch(next)
  };
 
 exports.getCommentsByArticleId = (request, response, next) => {
