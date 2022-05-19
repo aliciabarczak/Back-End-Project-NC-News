@@ -355,9 +355,9 @@ test('status 400: responds with "Bad Request" when passed an id of invalid type'
         return request(app)
         .post("/api/articles/1/comments")
         .send(postedComment)
-        .expect(404)
+        .expect(400)
         .then(({ body: { msg } }) => {
-            expect(msg).toBe("Username Not Found")
+            expect(msg).toBe("Bad Request")
         })
       });
 });
