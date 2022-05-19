@@ -45,7 +45,7 @@ exports.updateVotesById = (article_id, inc_votes) => {
     })
 };
 
-exports.fetchArticles = (sort_by = "created_at", order = "asc") => {
+exports.fetchArticles = (sort_by = "created_at", order = "desc") => {
     const validSortBy = ["title", "topic", "author", "created_at"];
     const validOrder = ["asc", "desc", "ASC", "DESC"];
 

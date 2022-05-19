@@ -363,12 +363,12 @@ test('status 400: responds with "Bad Request" when passed an id of invalid type'
 });
   
 describe.only("11. GET /api/articles (queries)", () => {
-  test('status 200: returns the articles sorted by the passed query', () => {
+  test('status 200: returns the articles sorted by the passed query in descending order by default', () => {
       return request(app)
       .get("/api/articles?sort_by=title")
       .expect(200)
       .then(({body: {articles}}) => {
-          expect(articles).toBeSortedBy("title")
+          expect(articles).toBeSortedBy("title", { descending: true })
       })
   })
   test('status 400: returns error message when passed invalid sorted by value', () => {
@@ -379,15 +379,15 @@ describe.only("11. GET /api/articles (queries)", () => {
         expect(msg).toBe("Invalid Sort Query")
     })
 })
-  test('status 200: articles are sorted by date by default', () => {
+  test('status 200: articles are sorted by date by default in descending order by default', () => {
     return request(app)
     .get("/api/articles")
     .expect(200)
     .then(({body: {articles}}) => {
-        expect(articles).toBeSortedBy("created_at")
+        expect(articles).toBeSortedBy("created_at", { descending: true })
     })
 })
-test('status 200: articles are sorted by decedning order', () => {
+test('status 200: articles can be sorted by decedning order', () => {
   return request(app)
   .get("/api/articles?order=desc")
   .expect(200)
@@ -395,7 +395,8 @@ test('status 200: articles are sorted by decedning order', () => {
       expect(articles).toBeSortedBy("created_at", { descending: true })
   })
 })
-test('status 200: articles are sorted by ascending order', () => {
+
+test('status 200: articles can be sorted by ascending order', () => {
   return request(app)
   .get("/api/articles?order=asc")
   .expect(200)
