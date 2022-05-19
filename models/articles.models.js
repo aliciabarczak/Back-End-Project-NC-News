@@ -4,8 +4,15 @@ exports.fetchTopics = () => {
     return db.query("SELECT * FROM topics").then(({rows}) => {
         return rows;
     })
-};
-
+ };
+exports.fetchTopicBySlug = (topic) => {
+    return db.query("SELECT * FROM topics WHERE slug = $1", [topic]).then(({rows}) => {
+        if(!rows.length) {
+            return Promise.reject({status: 404, msg: "Not Found"})
+        }
+        return rows
+    })
+ };
 exports.fetchArticleById = (article_id) => {
     return db.query(`
                     SELECT articles.*,
@@ -43,32 +50,52 @@ exports.updateVotesById = (article_id, inc_votes) => {
     }).then(({rows}) => {
         return rows[0];
     })
-};
+ };
+exports.fetchArticles = (sort_by = "created_at", order = "desc", topic) => {
+    const validSortBy = ["title", "topic", "author", "created_at", "votes", "comment_count"];
+    const validOrder = ["asc", "desc", "ASC", "DESC"];
+    const queryValues = []; 
 
-exports.fetchArticles = () => {
-    return db.query(
-           `SELECT articles.*,
-                COUNT(comment_id) AS comment_count
-            FROM articles 
-            LEFT JOIN comments 
-            ON articles.article_id = comments.article_id
-            GROUP BY articles.article_id
-            ORDER BY articles.created_at DESC;`)
+    let queryArray = ["SELECT articles.*,",
+                      " COUNT(comment_id) AS comment_count",
+                      " FROM articles", 
+                      " LEFT JOIN comments", 
+                      " ON articles.article_id = comments.article_id",
+                      " GROUP BY articles.article_id"]
+
+    if (topic) {
+        queryArray.splice(5, 0, ' WHERE topic = $1')
+        queryValues.push(topic)
+    }
+
+    if(validSortBy.includes(sort_by)) {
+        queryArray.push(` ORDER BY articles.${sort_by}`)
+    } else {
+        return Promise.reject({status: 400, msg: 'Invalid Sort Query'});
+    }
+
+    if(validOrder.includes(order)) {
+        queryArray.push(` ${order}`);
+    } else {
+        return Promise.reject({status: 400, msg: 'Invalid Order Query'});
+    }
+    const queryStr = queryArray.join("");
+
+    return db.query(queryStr, queryValues)
     .then(({rows}) => {
         rows.forEach((row) => {
             delete row.body
         })
         return rows 
     })
-};
+ };
 
 exports.fetchCommentsByArticleId = (article_id) => {
     return db.query(`SELECT * FROM comments WHERE article_id = $1;`, [article_id])
     .then(({rows}) => {  
         return rows
     })
-};
-
+ };
 exports.postCommentToDB = (article_id, username, body) => {
     return db.query(`INSERT INTO 
                     comments (body, author, article_id) 
@@ -77,4 +104,4 @@ exports.postCommentToDB = (article_id, username, body) => {
     .then(({rows}) => {
         return rows[0]
     })
-};
+ };
