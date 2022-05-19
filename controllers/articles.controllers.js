@@ -61,6 +61,7 @@ exports.postComment = (request, response, next) => {
     const { username, body } = request.body; 
     const promises = [fetchArticleById(article_id)]; 
 
+
     if (typeof username !== "string" || typeof body !== "string") {
         response.status(400).send({msg: "Bad Request"})
         }
