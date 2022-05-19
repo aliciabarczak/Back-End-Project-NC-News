@@ -436,3 +436,13 @@ describe("11. GET /api/articles (queries)", () => {
         })
   });
 
+  describe.only("12. DELETE /api/comments/:comment_id", () => {
+    test("status 204: deletes a given comment by comment_id and responds with an empty response body", () => {
+        return request(app)
+        .delete("/api/comments/1")
+        .expect(204)
+        .then(({body}) => {
+            expect(body).toEqual({});
+        })
+    })
+});

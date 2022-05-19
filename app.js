@@ -10,6 +10,7 @@ const { handleInvalidPathErrors,
         handleCustomErrors,
         handlePSQLErrors,
         handleInternalServerErrors } = require("./controllers/errors.controllers")
+const { deleteCommentbyId } = require("./controllers/comments.controllers")
 
 const app = express();
 
@@ -30,6 +31,7 @@ app.get("/api/articles?sort_by=created_at", getArticles);
 app.get("/api/articles?order=asc", getArticles);
 app.get("/api/articles?order=desc", getArticles);
 app.get("/api/articles?topic=mitch", getArticles);
+app.delete("/api/comments/:comment_id", deleteCommentbyId);
 
 app.use(handleInvalidPathErrors);
 app.use(handleCustomErrors);
