@@ -45,9 +45,9 @@ exports.updateVotesById = (article_id, inc_votes) => {
     })
 };
 
-exports.fetchArticles = (sort_by = "created_at", order) => {
+exports.fetchArticles = (sort_by = "created_at", order = "asc") => {
     const validSortBy = ["title", "topic", "author", "created_at"];
-    const validOrder = ["asc", "desc"];
+    const validOrder = ["asc", "desc", "ASC", "DESC"];
 
     let queryStr = `SELECT articles.*,
                       COUNT(comment_id) AS comment_count
@@ -58,11 +58,15 @@ exports.fetchArticles = (sort_by = "created_at", order) => {
 
     if(validSortBy.includes(sort_by)) {
         queryStr += ` ORDER BY articles.${sort_by}`
-    };
+    } else {
+        return Promise.reject({status: 400, msg: 'Invalid Sort Query'});
+    }
 
     if(validOrder.includes(order)) {
-        queryStr += ` ${order.toUpperCase()}`;
-    } 
+        queryStr += ` ${order}`;
+    } else {
+        return Promise.reject({status: 400, msg: 'Invalid Order Query'});
+    }
 
     return db.query(queryStr)
     .then(({rows}) => {

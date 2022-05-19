@@ -371,6 +371,14 @@ describe.only("11. GET /api/articles (queries)", () => {
           expect(articles).toBeSortedBy("title")
       })
   })
+  test('status 400: returns error message when passed invalid sorted by value', () => {
+    return request(app)
+    .get("/api/articles?sort_by=bestArticle")
+    .expect(400)
+    .then(({body: {msg}}) => {
+        expect(msg).toBe("Invalid Sort Query")
+    })
+})
   test('status 200: articles are sorted by date by default', () => {
     return request(app)
     .get("/api/articles")
@@ -394,5 +402,13 @@ test('status 200: articles are sorted by ascending order', () => {
   .then(({body: {articles}}) => {
       expect(articles).toBeSortedBy("created_at")
   })
+  })
+  test('status 400: returns error message when passed invalid order value', () => {
+    return request(app)
+    .get("/api/articles?order=banana")
+    .expect(400)
+    .then(({body: {msg}}) => {
+        expect(msg).toBe("Invalid Order Query")
+    })
 })
 });
