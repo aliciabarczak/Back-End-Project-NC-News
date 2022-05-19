@@ -3,7 +3,7 @@ exports.handleInvalidPathErrors = ('/*', (request, response, next) => {
 });
 
 exports.handlePSQLErrors = ((error, request, response, next) => {
-    if (error.code === '22P02') {
+    if (error.code === '22P02' || error.code === '23503') {
       response.status(400).send({ msg: 'Bad Request' });
     } else next(error);
 });
