@@ -3,6 +3,7 @@ const app = require('../app');
 const db = require('../db/connection');
 const seed = require("./../db/seeds/seed");
 const testData = require("./../db/data/test-data");
+const endpoints = require("./../endpoints.json");
 
 
 beforeEach(() => {
@@ -226,7 +227,7 @@ describe("8. GET /api/articles", () => {
   });
 
 describe("9. GET /api/articles/:article_id/comments", () => {
-    test.only("status 200: returns an array of comments for the given article_id", () => {
+    test("status 200: returns an array of comments for the given article_id", () => {
       return request(app)
       .get("/api/articles/1/comments")
       .expect(200)
@@ -271,7 +272,7 @@ describe("9. GET /api/articles/:article_id/comments", () => {
    }); 
   });
 
-  describe.only("10. POST /api/articles/:article_id/comments",() => {
+  describe("10. POST /api/articles/:article_id/comments",() => {
     test('status 201: should post requested comment from an exisiting user and return the same', () => {
         const postedComment = {
             username: "butter_bridge",
@@ -464,3 +465,14 @@ describe("11. GET /api/articles (queries)", () => {
        })
      });
 });
+describe("13. GET /api", () => {
+  test("returns json representation of all the available endpoints of the api", () => {
+      return request(app)
+      .get("/api")
+      .expect(200)
+      .then(({body: {avaliableEndpoints}}) => {
+        expect(avaliableEndpoints).toEqual(endpoints)
+      })
+  })
+});
+
