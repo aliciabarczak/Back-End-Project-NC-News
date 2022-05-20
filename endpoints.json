@@ -13,30 +13,30 @@
     "description": "serves an article object of the request ID",
     "queries": [],
     "exampleResponse": {
-      "article": 
-            author: "butter_bridge",
-            title: "Living in the shadow of a great man",
-            article_id: 1,
-            body: "I find this existence challenging",
-            topic: "mitch",
-            created_at: "2020-07-09T20:11:00.000Z",
-            votes: 100,
+      "article": {
+            "author": "butter_bridge",
+            "title": "Living in the shadow of a great man",
+            "article_id": "1",
+            "body": "I find this existence challenging",
+            "topic": "mitch",
+            "created_at": "2020-07-09T20:11:00.000Z",
+            "votes": "100"
+      }
     }
    },
 "PATCH /api/articles/:article_id": {
     "description": "increases or decreases the number of votes in the given article object by the respetive positive or negative number passed in the request body",
     "queries": [],
-    "request body" { "inc_votes": "newVote" },
     "exampleResponse": {
       "updatedArticle": {
             "author": "butter_bridge",
             "title": "Living in the shadow of a great man",
-            "article_id": 1,
+            "article_id": "1",
             "body": "I find this existence challenging",
             "topic": "mitch",
             "created_at": "2020-07-09T20:11:00.000Z",
-            "votes": 100,
-            "comment_count": 11,
+            "votes": "100",
+            "comment_count": "11"
       }
     }
    },
@@ -44,7 +44,7 @@
   "description": "serves an array of all user objects, each containing user username",
   "queries": [],
   "exampleResponse": {
-      "usernames": [{ "username": "butter_bridge" } ...]
+      "usernames": [{ "username": "butter_bridge" }]
      }
     }, 
 "GET /api/articles": {
@@ -54,11 +54,11 @@
       "articles": [{
           "author": "butter_bridge",
           "title": "Living in the shadow of a great man",
-          "article_id": 1,
+          "article_id": "1",
           "topic": "mitch",
           "created_at": "2020-07-09T20:11:00.000Z",
-          "votes": 100,
-          "comment_count": 11,
+          "votes": "100",
+          "comment_count": "11"
       }]
     }
   },
@@ -67,11 +67,11 @@
   "queries": [],
   "exampleResponse": {
       "comments": [{
-          "comment_id": 2,
+          "comment_id": "2",
           "body": "The beautiful thing about treasure is that it exists. Got to find out what kind of sheets these are; not cotton, not rayon, silky.",
-          "article_id": 1,
+          "article_id": "1",
           "author": "butter_bridge",
-          "votes": 14,
+          "votes": "14",
           "created_at": "2020-10-31T03:03:00.000Z"
       }]
     }
@@ -79,17 +79,13 @@
 "POST /api/articles/:article_id/comments": {
   "description": "adds the requested comment from an existing user to the given article",
   "queries": [],
-  "request body" {
-                "username": "butter_bridge",
-                "body": "please post this comment to article with id of 2" 
-                 },
   "exampleResponse": {
       "createdComment": [{
-            "comment_id": 19,
+            "comment_id": "19",
             "body": "please post this comment to article with id of 2",
-            "article_id": 2,
+            "article_id": "2",
             "author": "butter_bridge",
-            "votes": 0,
+            "votes": "0",
             "created_at": "2022-05-20T10:33:48.663Z"
         }]
       }
@@ -98,5 +94,5 @@
   "description": "deletes the given comment by comment_id",
   "queries": [],
   "exampleResponse": { "body": {} }
-   },
-};
+   }
+}
