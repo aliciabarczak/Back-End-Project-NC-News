@@ -27,6 +27,7 @@
 "PATCH /api/articles/:article_id": {
     "description": "increases or decreases the number of votes in the given article object by the respetive positive or negative number passed in the request body",
     "queries": [],
+    "exampleRequestBody": {"inc_votes": "5"}, 
     "exampleResponse": {
       "updatedArticle": {
             "author": "butter_bridge",
@@ -79,6 +80,10 @@
 "POST /api/articles/:article_id/comments": {
   "description": "adds the requested comment from an existing user to the given article",
   "queries": [],
+  "exampleRequestBody": {
+                         "username": "butter_bridge", 
+                         "body": "please post this comment to article with id of 2"
+                        }, 
   "exampleResponse": {
       "createdComment": [{
             "comment_id": "19",
@@ -90,7 +95,7 @@
         }]
       }
     },
-"GET /api/articles/:article_id/comments": {
+"DELETE /api/articles/:article_id/comments": {
   "description": "deletes the given comment by comment_id",
   "queries": [],
   "exampleResponse": { "body": {} }
