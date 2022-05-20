@@ -11,10 +11,14 @@ const { handleInvalidPathErrors,
         handlePSQLErrors,
         handleInternalServerErrors } = require("./controllers/errors.controllers")
 const { deleteCommentbyId } = require("./controllers/comments.controllers")
+const { getEndpoints } = require("./controllers/endpoints.controllers")
 
 const app = express();
 
 app.use(express.json());
+
+
+app.get("/api", getEndpoints)
 
 app.get("/api/topics", getTopics);
 
