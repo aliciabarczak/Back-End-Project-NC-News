@@ -151,12 +151,12 @@ describe("5. PATCH /api/articles/:article_id",() => {
         })
     });
 
-    describe("6. GET /api/users", () => {
-      test('status 200: responds with an array of objects with username properties only', () => {
-          return request(app)
-          .get("/api/users")
-          .expect(200)
-          .then(({body: {usernames}}) => {
+describe("6. GET /api/users", () => {
+  test('status 200: responds with an array of objects with username properties only', () => {
+      return request(app)
+        .get("/api/users")
+        .expect(200)
+        .then(({body: {usernames}}) => {
               expect(usernames).toHaveLength(4)
               usernames.forEach((user) => {
                   expect.objectContaining({
@@ -175,7 +175,7 @@ describe("5. PATCH /api/articles/:article_id",() => {
     })
   });
   })
-describe("7. GET /api/articles/:article_id (comment count)",() => {
+describe("7. GET /api/articles/:article_id (comment count)",   () => {
   test('status 200: returns the article response object which new comment_count property', () => {
     return request(app)
     .get("/api/articles/1")
@@ -226,11 +226,12 @@ describe("8. GET /api/articles", () => {
   });
 
 describe("9. GET /api/articles/:article_id/comments", () => {
-    test("status 200: returns an array of comments for the given article_id", () => {
+    test.only("status 200: returns an array of comments for the given article_id", () => {
       return request(app)
       .get("/api/articles/1/comments")
       .expect(200)
       .then(({body: { comments }}) => {
+        console.log(comments)
           expect(comments).toHaveLength(11);
           comments.forEach((comment) => {
               expect.objectContaining({
@@ -270,7 +271,7 @@ describe("9. GET /api/articles/:article_id/comments", () => {
    }); 
   });
 
-  describe("10. POST /api/articles/:article_id/comments",() => {
+  describe.only("10. POST /api/articles/:article_id/comments",() => {
     test('status 201: should post requested comment from an exisiting user and return the same', () => {
         const postedComment = {
             username: "butter_bridge",
@@ -281,6 +282,7 @@ describe("9. GET /api/articles/:article_id/comments", () => {
         .send(postedComment)
         .expect(201)
         .then(({ body: { createdComment } }) => {
+          console.log(createdComment)
             expect(createdComment).toEqual(expect.objectContaining({
                 article_id: 2,
                 author: "butter_bridge",
@@ -436,7 +438,7 @@ describe("11. GET /api/articles (queries)", () => {
         })
   });
 
-  describe.only("12. DELETE /api/comments/:comment_id", () => {
+  describe("12. DELETE /api/comments/:comment_id", () => {
     test("status 204: deletes a given comment by comment_id and responds with an empty response body", () => {
         return request(app)
         .delete("/api/comments/4")
