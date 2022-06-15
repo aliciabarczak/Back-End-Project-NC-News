@@ -57,19 +57,19 @@ exports.fetchArticles = (sort_by = "created_at", order = "desc", topic) => {
     const queryValues = []; 
 
     let queryArray = ["SELECT articles.*,",
-                      " COUNT(comment_id) AS comment_count",
+                      " COUNT(comments.comment_id) AS comment_count",
                       " FROM articles", 
                       " LEFT JOIN comments", 
-                      " ON articles.article_id = comments.article_id",
-                      " GROUP BY articles.article_id"]
+                      " ON articles.article_id = comments.article_id"]
 
     if (topic) {
         queryArray.splice(5, 0, ' WHERE topic = $1')
         queryValues.push(topic)
     }
+    queryArray.push(" GROUP BY articles.article_id")
 
     if(validSortBy.includes(sort_by)) {
-        queryArray.push(` ORDER BY articles.${sort_by}`)
+        queryArray.push(` ORDER BY ${sort_by}`)
     } else {
         return Promise.reject({status: 400, msg: 'Invalid Sort Query'});
     }

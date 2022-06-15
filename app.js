@@ -33,15 +33,6 @@ app.get("/api/articles", getArticles);
 app.get("/api/articles/:article_id/comments", getCommentsByArticleId);
 app.get("/api/users", getAllUsers);
 app.post("/api/articles/:article_id/comments", postComment);
-app.get("/api/articles?sort_by=title", getArticles);
-app.get("/api/articles?sort_by=topic", getArticles);
-app.get("/api/articles?sort_by=author", getArticles);
-app.get("/api/articles?sort_by=created_at", getArticles);
-app.get("/api/articles?sort_by=comment_count", getArticles);
-app.get("/api/articles?sort_by=votes", getArticles);
-app.get("/api/articles?order=asc", getArticles);
-app.get("/api/articles?order=desc", getArticles);
-app.get("/api/articles?topic=mitch", getArticles);
 app.delete("/api/comments/:comment_id", deleteCommentbyId);
 
 app.use(handleInvalidPathErrors);

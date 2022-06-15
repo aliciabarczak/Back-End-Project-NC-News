@@ -370,6 +370,14 @@ describe("11. GET /api/articles (queries)", () => {
           expect(articles).toBeSortedBy("title", { descending: true })
       })
     })
+    test('status 200: returns the articles sorted by the passed query in descending order by default', () => {
+      return request(app)
+      .get("/api/articles?sort_by=comment_count")
+      .expect(200)
+      .then(({body: {articles}}) => {
+          expect(articles).toBeSortedBy("comment_count", { descending: true, coerce: true })
+      })
+    })
   test('status 400: returns error message when passed invalid sorted by value', () => {
     return request(app)
     .get("/api/articles?sort_by=bestArticle")
