@@ -95,7 +95,7 @@
         }]
       }
     },
-"DELETE /api/articles/:article_id/comments": {
+"DELETE /api/comments/:comment_id": {
   "description": "deletes the given comment by comment_id",
   "queries": [],
   "exampleResponse": { "body": {} }
