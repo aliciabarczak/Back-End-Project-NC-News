@@ -22,20 +22,24 @@ A working example of this API is published at https://nc-news-alicia.herokuapp.c
 
 These instructions will help you to get a copy of NC News up and running on your local machine.
 
-#### Installing
+#### Pre-requiste Software
 
 Ensure you have the following software installed:
 
 - Node.js 17.7.1
 - Postgres 14.2
 
-Fork this repository from: github.com/aliciabarczak/NC-News-BE.
+#### Fork, Clone and Install NPM
+
+Fork and clone this repository from: github.com/aliciabarczak/NC-News-BE.
 
 Inside this new directory, install the required npm packages:
 
 ```
 npm i
 ```
+
+#### Set up the Environment Variables
 
 Next, in order to create the necessary environment variables:
 
