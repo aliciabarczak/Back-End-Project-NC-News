@@ -2,7 +2,7 @@
 
 ## Back End RESTful API
 
-This API was built during week six of the Northcoders' Full Stack Developer Course(https://northcoders.com/our-courses/coding-bootcamp) and it contains a collection of endpoints to access the database that stores information for NC News - a news aggregation web app modelled by Reddit.
+This API was built during week six of the Northcoders' Full Stack Developer Course and it contains a collection of endpoints to access the database that stores information for NC News - a news aggregation web app modelled by Reddit.
 
 This project aims to demonstrate some of the skills learnt in four weeks of back end study including:
 
