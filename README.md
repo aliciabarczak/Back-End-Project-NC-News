@@ -6,11 +6,11 @@ This API was built during week six of the Northcoders' Full Stack Developer Cour
 
 This project aims to demonstrate some of the skills learnt in four weeks of back end study including:
 
--JavaScript programming
--use of Node.js web application frameworks such as Express
--building a RESTful Web API to respond to HTTP requests
--storing data and interacting with databases using SQL
--Test Driven Development using Supertest
+- JavaScript programming
+- use of Node.js web application frameworks such as Express
+- building a RESTful Web API to respond to HTTP requests
+- storing data and interacting with databases using SQL
+- Test Driven Development using Supertest
 
 This back end application is consumed by the front end React app created during week nine of the course. Details of the front end may be found on Github: https://github.com/aliciabarczak/NC-News-FE.
 
